@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Letter to My Love, fish</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@400;500;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #fccb90 75%, #ff6b95 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.3;
+            animation: floatUp 20s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .music-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .music-btn {
+            background: linear-gradient(135deg, #ff6b95, #ff8a95);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(255, 107, 149, 0.4);
+        }
+
+        .music-note {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .song-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .song-title {
+            font-size: 0.9rem;
+            color: #764ba2;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .song-status {
+            font-size: 0.75rem;
+            color: #ff6b95;
+            font-weight: 500;
+        }
+
+        .playlist-toggle {
+            background: none;
+            border: none;
+            color: #764ba2;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .playlist-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .playlist-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            padding: 10px;
+            min-width: 200px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1001;
+        }
+
+        .playlist-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .playlist-item {
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #5d4037;
+        }
+
+        .playlist-item:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 149, 0.1), rgba(118, 75, 162, 0.1));
+        }
+
+        .playlist-item.active {
+            background: linear-gradient(135deg, rgba(255, 107, 149, 0.2), rgba(118, 75, 162, 0.2));
+            color: #764ba2;
+            font-weight: 600;
+        }
+
+        /* Main container */
+        .main-container {
+            width: 100%;
+            max-width: 1400px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1.5s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3rem, 6vw, 5rem);
+            background: linear-gradient(135deg, #fff, #fccb90);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 700;
+        }
+
+        /* Envelope container */
+        .envelope-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            margin-bottom: 40px;
+        }
+
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(135deg, #ff6b95 0%, #ff8a95 100%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top;
+            transition: transform 0.6s ease;
+        }
+
+        .envelope.open::before {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(135deg, #ff6b95 0%, #ff8a95 100%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 2;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-body {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            border-radius: 0 0 20px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            color: #ff6b95;
+        }
+
+        /* Progress */
+        .progress-container {
+            width: 100%;
+            max-width: 600px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff6b95, #fccb90, #764ba2);
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(255, 107, 149, 0.5);
+        }
+
+        .progress-text {
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Letters container */
+        .letters-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+            margin-bottom: 40px;
+            perspective: 1000px;
+        }
+
+        .letter-card {
+            background: linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transform-style: preserve-3d;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(50px) rotateX(-10deg);
+            animation: slideUp 0.8s ease forwards;
+            border: 2px solid rgba(255, 107, 149, 0.2);
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+            }
+        }
+
+        .letter-card:hover {
+            transform: translateY(-10px) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .letter-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6b95, #fccb90, #764ba2, #ff6b95);
+            border-radius: 15px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            background-size: 400% 400%;
+            animation: gradientMove 3s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .letter-card:hover::before {
+            opacity: 1;
+        }
+
+        .letter-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #ff6b95, #ff8a95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(255, 107, 149, 0.3);
+        }
+
+        .letter-content {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: #5d4037;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .letter-seal {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b95, #fccb90);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 107, 149, 0.3);
+            opacity: 0.8;
+        }
+
+        /* Button */
+        .reveal-btn {
+            background: linear-gradient(135deg, #ff6b95, #fccb90);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 149, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reveal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .reveal-btn:hover::before {
+            left: 100%;
+        }
+
+        .reveal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 149, 0.4);
+        }
+
+        /* Final message */
+        .final-message {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            max-width: 600px;
+            display: none;
+            animation: fadeIn 1s ease-out;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .final-message h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ff6b95, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .final-message p {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            color: #5d4037;
+            line-height: 1.6;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .music-player {
+                top: 10px;
+                right: 10px;
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .music-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+
+            .song-info {
+                display: none;
+            }
+
+            .envelope-container {
+                height: 300px;
+            }
+
+            .letters-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .letter-card {
+                padding: 20px;
+                min-height: 150px;
+            }
+
+            .letter-content {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background particles -->
+    <div class="particle" style="left: 10%; animation-delay: 0s; font-size: 20px;">💕</div>
+    <div class="particle" style="left: 20%; animation-delay: 2s; font-size: 25px;">💖</div>
+    <div class="particle" style="left: 30%; animation-delay: 4s; font-size: 18px;">🌸</div>
+    <div class="particle" style="left: 40%; animation-delay: 6s; font-size: 22px;">💗</div>
+    <div class="particle" style="left: 50%; animation-delay: 8s; font-size: 20px;">🌺</div>
+    <div class="particle" style="left: 60%; animation-delay: 10s; font-size: 24px;">💝</div>
+    <div class="particle" style="left: 70%; animation-delay: 12s; font-size: 19px;">🌷</div>
+    <div class="particle" style="left: 80%; animation-delay: 14s; font-size: 21px;">💕</div>
+    <div class="particle" style="left: 90%; animation-delay: 16s; font-size: 23px;">🌹</div>
+
+    <!-- Background Music -->
+    <audio id="song1" loop>
+        <source src="song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <audio id="song2" loop>
+        <source src="song2.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <audio id="song3" loop>
+        <source src="song3.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <audio id="song4" loop>
+        <source src="song4.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <audio id="song5" loop>
+        <source src="song5.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="music-controls">
+            <button class="music-btn" id="prevBtn" title="Previous Song">
+                <i class="fas fa-backward"></i>
+            </button>
+            <button class="music-btn" id="playPauseBtn" title="Play/Pause">
+                <i class="fas fa-play music-note" id="playIcon"></i>
+            </button>
+            <button class="music-btn" id="nextBtn" title="Next Song">
+                <i class="fas fa-forward"></i>
+            </button>
+        </div>
+        
+        <div class="song-info">
+            <div class="song-title" id="songTitle">Our First Love Song</div>
+            <div class="song-status" id="songStatus">Click to play</div>
+        </div>
+        
+        <button class="playlist-toggle" id="playlistToggle" title="Playlist">
+            <i class="fas fa-list"></i>
+        </button>
+        
+        <div class="playlist-dropdown" id="playlistDropdown">
+            <div class="playlist-item active" data-song="1">
+                <i class="fas fa-music"></i>
+                <span>Our First Love Song</span>
+            </div>
+            <div class="playlist-item" data-song="2">
+                <i class="fas fa-music"></i>
+                <span>Our Second Love Song</span>
+            </div>
+            <div class="playlist-item" data-song="3">
+                <i class="fas fa-music"></i>
+                <span>Our Third Love Song</span>
+            </div>
+            <div class="playlist-item" data-song="4">
+                <i class="fas fa-music"></i>
+                <span>Our Fourth Love Song</span>
+            </div>
+            <div class="playlist-item" data-song="5">
+                <i class="fas fa-music"></i>
+                <span>Our Fifth Love Song</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <header>
+            <h1>A Letter to My Love</h1>
+            <p class="subtitle">For my dearest fish</p>
+        </header>
+
+        <div class="envelope-container">
+            <div class="envelope" id="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body">
+                    <span id="envelopeText">Click to open</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="progress-text" id="progressText">0% of letter revealed</div>
+
+        <div class="letters-container" id="lettersContainer">
+            <!-- Letter cards will be dynamically inserted here -->
+        </div>
+
+        <div class="btn-container">
+            <button class="reveal-btn" id="revealBtn" style="display: none;">
+                <i class="fas fa-envelope-open-text"></i>
+                Reveal More Letters
+            </button>
+        </div>
+
+        <div class="final-message" id="finalMessage">
+            <h2>I Love You, fish</h2>
+            <p>Now. And forever.</p>
+        </div>
+    </div>
+
+    <script>
+        // Letter content
+        const letterContent = [
+            "Why I love you",
+            "I didn't fall for you because I was bored, or because I was searching for something to fill a void.",
+            "I didn't fall in love with you because I needed saving, or because I thought I couldn't be happy without you.",
+            "No, I fell because you opened my eyes to things I hadn't felt in a while.",
+            "You brought me a love that felt like sunlight after a long winter (i know u hate summer sorry, the sunlight here is 15 degrees not 40).",
+            "I love you simply because you *were*—",
+            "Because you appeared when the universe decided the time was right.",
+            "And in that moment, you seized my attention like a song I never wanted to stop hearing.",
+            "It's as if my heart *knew* you would be the one to teach it to beat in new rhythms (tbh it was after knowing u for a bit 😔😔 n)",
+            "To show me feelings I never thought were possible, and open my soul to warmth I had never known.",
+            "I fell in love with you because it felt like *having all anxiety removed from me.*",
+            "It was effortless, like the way we breathe.",
+            "Or how a bird knows the way back to its nest, even from miles away.",
+            "In your presence, I want to be better.",
+            "In your absence, I find myself searching for ways to grow.",
+            "In your words, I hear truths I never dared to speak aloud.",
+            "In your silence, I find the ache in your voice, like a song left unsung in the quiet.",
+            "I fell in love with you for the simplest, most profound reason—",
+            "Because with you, everything just *fits.*",
+            "It feels *right,* in a way I can't fully explain.",
+            "But I know with every beat of my heart, it's exactly how I'm meant to feel.",
+            "I love you, fish. Now. And forever.",
+            "Your beauty takes my breath away. Your eyes are so bright and big I could swim in them, looking at them makes me dizzy.",
+            "Your fluffy black hair, pretty face, and cute nose - all of you is total perfectiness. You have the prettiest skin tones ever, I love it so much.",
+            "Your personality lights up my world. You're too funny and have similar humor to me, and you stay patient even when I'm overwhelming.",
+            "You're extremely loving and caring, even though you try to show bitchiness - it's not you, I know that hahahaah 😔😡",
+            "You're a real one - generous with a selfless and humble soul. You have good taste and I love the same things you love 😔",
+            "You're so considerate and caring, always taking attention to me. You cook so good and take beautiful photos of the things you cook.",
+            "I feel peace imagining you comfortably resting in my arms, as it is for me to converse with you.",
+            "You're so accomplished - you set and achieve your goals. You come from chaos but you've acquired property and career mobility, you're destined to have all you want.",
+            "You're my small baby who listens to me. You're an individualist and critical thinker who does your own thing instead of losing yourself in others' opinions.",
+            "I love this so much about you, you idiot! You're in touch with every side of your emotions and unafraid to face them, making you wise and authentic.",
+            "You aren't afraid to set boundaries or cut off people and things that don't serve your best interests. I feel like I can relate to you sometimes.",
+            "You're well rounded (not your ass it's flattened 😓) and will succeed in anything. Your experiences and interests are so interesting.",
+            "I admire your work ethic so much. You never quit and keep working hard even when it's frustrating. You're the hardest worker I know, but I know how much it hurts you.",
+            "I wish you could stop working and never tire yourself again. It really hurts me seeing you hurting.",
+            "You make trust so easy with your direct communication and gentle temperament with me. I love your taste in music and your voice is so drugging.",
+            "You're not afraid to have deep or sad conversations, but they're not your only conversations. Your ability to focus and prioritize important things amazes me.",
+            "Your flexibility regarding plans evolving, and how we can indulge our inner child together with things like Nintendo or cosplay.",
+            "You're realistic and authentic about the realities of life and its struggle. You take good selfies - I love looking at your big eyes and pretty face.",
+            "Every moment with you is awesome in its own way. You comfort me, calm me, reassure me, and love me as I am.",
+            "You soften me, soothe me, and ground me. You take nothing for granted and value your loved ones.",
+            "You respect differences and appreciate similarities. You defend truth and face your fears. You're out of this world!",
+            "You are so generous and kind, eternal and formless. You're gorgeous inside and out, work hard and never give up.",
+            "You address shame and guilt with heart and contemplate balance in all things. You're consistent in your values and cannot be swayed by temporality.",
+            "You back your words up with actions and know the value of vulnerability and the compassion in boundaries.",
+            "You are such a sweetheart and strong. You lead with the heart and also follow it.",
+            "You are the deity upon which I meditate and devote my life to."
+        ];
+
+        const seals = ['💕', '🌸', '💖', '🌺', '💗', '🌹', '💝', '🌷', '💕', '🌸', '💖', '🌺'];
+
+        let currentCardIndex = 0;
+        const cardsToShow = 4;
+        let totalCardsShown = 0;
+        let currentSong = 1;
+        const totalSongs = 5;
+        let isPlaying = false;
+        let userInteracted = false;
+        let envelopeOpened = false;
+
+        // Initialize the page
+        function init() {
+            initMusicPlayer();
+            setupEnvelopeInteraction();
+        }
+
+        // Setup envelope interaction
+        function setupEnvelopeInteraction() {
+            const envelope = document.getElementById('envelope');
+            const envelopeText = document.getElementById('envelopeText');
+            
+            envelope.addEventListener('click', function() {
+                if (!envelopeOpened) {
+                    envelope.classList.add('open');
+                    envelopeText.textContent = 'Letters revealed!';
+                    envelopeOpened = true;
+                    
+                    setTimeout(() => {
+                        showNextCards();
+                        document.getElementById('revealBtn').style.display = 'flex';
+                    }, 600);
+                    
+                    // Start music on envelope open
+                    if (!userInteracted) {
+                        userInteracted = true;
+                        const playPauseBtn = document.getElementById('playPauseBtn');
+                        playPauseBtn.click();
+                    }
+                }
+            });
+        }
+
+        // Initialize music player
+        function initMusicPlayer() {
+            const songs = [
+                document.getElementById('song1'),
+                document.getElementById('song2'),
+                document.getElementById('song3'),
+                document.getElementById('song4'),
+                document.getElementById('song5')
+            ];
+            
+            const songTitles = [
+                'Our First Love Song',
+                'Our Second Love Song',
+                'Our Third Love Song',
+                'Our Fourth Love Song',
+                'Our Fifth Love Song'
+            ];
+
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const playIcon = document.getElementById('playIcon');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const playlistToggle = document.getElementById('playlistToggle');
+            const playlistDropdown = document.getElementById('playlistDropdown');
+            const songTitle = document.getElementById('songTitle');
+            const songStatus = document.getElementById('songStatus');
+
+            // Set initial volume for all songs
+            songs.forEach(song => {
+                song.volume = 0.5;
+            });
+
+            // Play/Pause functionality
+            playPauseBtn.addEventListener('click', togglePlayPause);
+
+            function togglePlayPause() {
+                if (!userInteracted) {
+                    userInteracted = true;
+                }
+
+                if (isPlaying) {
+                    pauseCurrentSong();
+                } else {
+                    playCurrentSong();
+                }
+            }
+
+            function playCurrentSong() {
+                const currentAudio = songs[currentSong - 1];
+                
+                // Stop all other songs
+                songs.forEach((song, index) => {
+                    if (index !== currentSong - 1) {
+                        song.pause();
+                        song.currentTime = 0;
+                    }
+                });
+                
+                // Play current song
+                currentAudio.play().then(() => {
+                    isPlaying = true;
+                    playIcon.className = 'fas fa-pause music-note';
+                    songStatus.textContent = 'Playing';
+                }).catch(error => {
+                    console.log('Play failed:', error);
+                });
+            }
+
+            function pauseCurrentSong() {
+                const currentAudio = songs[currentSong - 1];
+                currentAudio.pause();
+                isPlaying = false;
+                playIcon.className = 'fas fa-play music-note';
+                songStatus.textContent = 'Paused';
+            }
+
+            // Previous/Next song functionality
+            prevBtn.addEventListener('click', () => {
+                const prevSong = currentSong === 1 ? totalSongs : currentSong - 1;
+                switchSong(prevSong);
+            });
+
+            nextBtn.addEventListener('click', () => {
+                const nextSong = currentSong === totalSongs ? 1 : currentSong + 1;
+                switchSong(nextSong);
+            });
+
+            function switchSong(songNumber) {
+                const wasPlaying = isPlaying;
+                
+                // Stop current song
+                pauseCurrentSong();
+                
+                // Switch song
+                currentSong = songNumber;
+                updateSongUI();
+                
+                // Resume playing if it was playing
+                if (wasPlaying && userInteracted) {
+                    playCurrentSong();
+                }
+            }
+
+            // Playlist functionality
+            playlistToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                playlistDropdown.classList.toggle('show');
+            });
+
+            // Close playlist when clicking outside
+            document.addEventListener('click', () => {
+                playlistDropdown.classList.remove('show');
+            });
+
+            playlistDropdown.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            // Playlist item clicks
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const songNumber = parseInt(this.dataset.song);
+                    switchSong(songNumber);
+                    playlistDropdown.classList.remove('show');
+                });
+            });
+
+            // Update song UI
+            function updateSongUI() {
+                document.querySelectorAll('.playlist-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector(`.playlist-item[data-song="${currentSong}"]`).classList.add('active');
+                
+                songTitle.textContent = songTitles[currentSong - 1];
+            }
+        }
+
+        // Show the next set of letter cards
+        function showNextCards() {
+            const container = document.getElementById('lettersContainer');
+            const endIndex = Math.min(currentCardIndex + cardsToShow, letterContent.length);
+            
+            for (let i = currentCardIndex; i < endIndex; i++) {
+                setTimeout(() => {
+                    const card = createLetterCard(i, letterContent[i]);
+                    container.appendChild(card);
+                    totalCardsShown++;
+                    updateProgressBar();
+                }, (i - currentCardIndex) * 200);
+            }
+            
+            currentCardIndex = endIndex;
+            
+            // Hide the button if all cards are shown
+            if (currentCardIndex >= letterContent.length) {
+                setTimeout(() => {
+                    document.getElementById('revealBtn').style.display = 'none';
+                    showFinalMessage();
+                }, 800);
+            }
+        }
+
+        // Create a single letter card
+        function createLetterCard(index, content) {
+            const card = document.createElement('div');
+            card.className = 'letter-card';
+            card.style.animationDelay = `${index * 0.1}s`;
+            card.innerHTML = `
+                <div class="letter-number">${index + 1}</div>
+                <div class="letter-content">${content}</div>
+                <div class="letter-seal">${seals[index % seals.length]}</div>
+            `;
+            return card;
+        }
+
+        // Update the progress bar
+        function updateProgressBar() {
+            const percentage = Math.round((totalCardsShown / letterContent.length) * 100);
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `${percentage}% of letter revealed`;
+        }
+
+        // Show the final message
+        function showFinalMessage() {
+            setTimeout(() => {
+                document.getElementById('finalMessage').style.display = 'block';
+            }, 500);
+        }
+
+        // Event listeners
+        document.getElementById('revealBtn').addEventListener('click', showNextCards);
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Handle visibility change to pause music when tab is not visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isPlaying) {
+                document.getElementById('playPauseBtn').click();
+            }
+        });
+    </script>
+</body>
+</html>
