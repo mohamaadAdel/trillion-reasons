@@ -228,7 +228,7 @@
 
         h1 {
             font-family: Arial, sans-serif;
-            font-size: clamp(3rem, 6vw, 5rem);
+            font-size: clamp(2rem, 5vw, 4rem);
             background: linear-gradient(135deg, #fff, #fccb90);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -239,7 +239,7 @@
 
         .subtitle {
             font-family: Arial, sans-serif;
-            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
             color: rgba(255, 255, 255, 0.9);
             font-weight: 700;
         }
@@ -345,6 +345,7 @@
             opacity: 0;
             transform: translateY(20px);
             animation: letterAppear 0.6s ease forwards;
+            min-height: 80px;
         }
 
         @keyframes letterAppear {
@@ -356,17 +357,6 @@
 
         .envelope-letter:nth-child(2) {
             animation-delay: 0.2s;
-        }
-
-        .envelope-letter.vanishing {
-            animation: letterVanish 0.4s ease forwards;
-        }
-
-        @keyframes letterVanish {
-            to {
-                opacity: 0;
-                transform: translateY(-20px) scale(0.9);
-            }
         }
 
         .letter-number {
@@ -531,8 +521,13 @@
                 display: none;
             }
 
+            .main-container {
+                padding: 15px;
+            }
+
             .envelope-container {
-                height: 400px;
+                height: 450px; /* Increased from 400px */
+                margin-bottom: 25px;
             }
 
             .envelope-flap {
@@ -547,12 +542,104 @@
                 padding: 15px;
             }
 
+            .envelope-letters {
+                gap: 15px; /* Reduced gap for mobile */
+            }
+
+            .envelope-letter {
+                padding: 15px;
+                min-height: 90px; /* Added min-height */
+            }
+
             .letter-content {
-                font-size: 1.2rem;
+                font-size: 1.1rem; /* Slightly smaller for mobile */
+            }
+
+            .letter-number {
+                width: 25px;
+                height: 25px;
+                font-size: 0.8rem;
+            }
+
+            .letter-seal {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
             }
 
             .envelope-prompt {
                 font-size: 1.5rem;
+            }
+
+            .progress-container {
+                margin-bottom: 15px;
+            }
+
+            .progress-text {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+
+            .reveal-btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+
+            .final-message {
+                padding: 30px 20px;
+                margin-top: 20px;
+            }
+
+            .final-message h2 {
+                font-size: 2.5rem;
+            }
+
+            .final-message p {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Small mobile devices */
+        @media (max-width: 480px) {
+            .envelope-container {
+                height: 480px; /* Even more height for small phones */
+            }
+
+            .envelope-letters {
+                gap: 12px; /* Even smaller gap */
+            }
+
+            .envelope-letter {
+                padding: 12px;
+                min-height: 85px;
+            }
+
+            .letter-content {
+                font-size: 1rem;
+            }
+
+            h1 {
+                font-size: clamp(1.8rem, 4vw, 3rem);
+            }
+
+            .subtitle {
+                font-size: clamp(1rem, 2.5vw, 1.5rem);
+            }
+        }
+
+        /* Very small mobile devices */
+        @media (max-width: 360px) {
+            .envelope-container {
+                height: 500px;
+            }
+
+            .envelope-letter {
+                padding: 10px;
+                min-height: 80px;
+            }
+
+            .letter-content {
+                font-size: 0.95rem;
             }
         }
     </style>
@@ -919,43 +1006,23 @@
             const container = document.getElementById('envelopeLetters');
             const endIndex = Math.min(currentCardIndex + cardsToShow, letterContent.length);
             
-            // First, make existing letters vanish
-            const existingLetters = container.querySelectorAll('.envelope-letter');
-            if (existingLetters.length > 0) {
-                existingLetters.forEach(letter => {
-                    letter.classList.add('vanishing');
-                });
-                
-                // Wait for vanish animation to complete
-                setTimeout(() => {
-                    container.innerHTML = '';
-                    addNewLetters(container, endIndex);
-                }, 400);
-            } else {
-                // First time, just add letters
-                addNewLetters(container, endIndex);
-            }
+            // Clear container immediately and add new letters
+            container.innerHTML = '';
             
-            currentCardIndex = endIndex;
-            
-            // Hide the button if all cards are shown
-            if (currentCardIndex >= letterContent.length) {
-                setTimeout(() => {
-                    document.getElementById('revealBtn').style.display = 'none';
-                    showFinalMessage();
-                }, 800);
-            }
-        }
-
-        // Add new letters to the envelope
-        function addNewLetters(container, endIndex) {
             for (let i = currentCardIndex; i < endIndex; i++) {
                 const letter = createEnvelopeLetter(i, letterContent[i]);
                 container.appendChild(letter);
                 totalCardsShown++;
             }
             
+            currentCardIndex = endIndex;
             updateProgressBar();
+            
+            // Hide the button if all cards are shown
+            if (currentCardIndex >= letterContent.length) {
+                document.getElementById('revealBtn').style.display = 'none';
+                showFinalMessage();
+            }
         }
 
         // Create a single letter card for the envelope
