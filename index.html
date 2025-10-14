@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Letter to My Love, fish</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@400;500;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <title>A Letter to My Love, Lish</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,7 +14,7 @@
         }
 
         body {
-            font-family: 'Quicksand', sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #fccb90 75%, #ff6b95 100%);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
@@ -200,7 +200,7 @@
         /* Main container */
         .main-container {
             width: 100%;
-            max-width: 1400px;
+            max-width: 900px;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -227,7 +227,7 @@
         }
 
         h1 {
-            font-family: 'Dancing Script', cursive;
+            font-family: Arial, sans-serif;
             font-size: clamp(3rem, 6vw, 5rem);
             background: linear-gradient(135deg, #fff, #fccb90);
             -webkit-background-clip: text;
@@ -238,7 +238,7 @@
         }
 
         .subtitle {
-            font-family: 'Caveat', cursive;
+            font-family: Arial, sans-serif;
             font-size: clamp(1.5rem, 3vw, 2rem);
             color: rgba(255, 255, 255, 0.9);
             font-weight: 700;
@@ -249,8 +249,8 @@
             position: relative;
             width: 100%;
             max-width: 800px;
-            height: 400px;
-            margin-bottom: 40px;
+            height: 500px;
+            margin-bottom: 30px;
         }
 
         .envelope {
@@ -260,27 +260,13 @@
             background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             overflow: hidden;
+            transition: all 0.6s ease;
         }
 
-        .envelope::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(135deg, #ff6b95 0%, #ff8a95 100%);
-            clip-path: polygon(0 0, 100% 0, 50% 100%);
-            transform-origin: top;
-            transition: transform 0.6s ease;
-        }
-
-        .envelope.open::before {
-            transform: rotateX(180deg);
+        .envelope.open {
+            transform: scale(1.02);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.25);
         }
 
         .envelope-flap {
@@ -288,12 +274,13 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 50%;
+            height: 120px;
             background: linear-gradient(135deg, #ff6b95 0%, #ff8a95 100%);
             clip-path: polygon(0 0, 100% 0, 50% 100%);
             transform-origin: top;
-            transition: transform 0.6s ease;
-            z-index: 2;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+            cursor: pointer;
         }
 
         .envelope.open .envelope-flap {
@@ -302,18 +289,128 @@
 
         .envelope-body {
             position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 60px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
             background: white;
-            border-radius: 0 0 20px 20px;
+            border-radius: 0 0 15px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .envelope-prompt {
+            font-family: Arial, sans-serif;
+            font-size: 2rem;
+            color: #ff6b95;
+            text-align: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .envelope.open .envelope-prompt {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Letters inside envelope */
+        .envelope-letters {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .envelope.open .envelope-letters {
+            opacity: 1;
+        }
+
+        .envelope-letter {
+            background: linear-gradient(135deg, #ffffff 0%, #fff9f9 100%);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid rgba(255, 107, 149, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: letterAppear 0.6s ease forwards;
+        }
+
+        @keyframes letterAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .envelope-letter:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .envelope-letter.vanishing {
+            animation: letterVanish 0.4s ease forwards;
+        }
+
+        @keyframes letterVanish {
+            to {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.9);
+            }
+        }
+
+        .letter-number {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #ff6b95, #ff8a95);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Caveat', cursive;
-            font-size: 2rem;
-            color: #ff6b95;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 8px rgba(255, 107, 149, 0.3);
+        }
+
+        .letter-content {
+            font-family: Arial, sans-serif;
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: #5d4037;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .letter-seal {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #ff6b95, #fccb90);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: white;
+            box-shadow: 0 3px 8px rgba(255, 107, 149, 0.3);
+            opacity: 0.8;
         }
 
         /* Progress */
@@ -323,7 +420,7 @@
             height: 8px;
             background: rgba(255, 255, 255, 0.3);
             border-radius: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             overflow: hidden;
             backdrop-filter: blur(10px);
         }
@@ -346,116 +443,6 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
-        /* Letters container */
-        .letters-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            width: 100%;
-            margin-bottom: 40px;
-            perspective: 1000px;
-        }
-
-        .letter-card {
-            background: linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            position: relative;
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transform-style: preserve-3d;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
-            transform: translateY(50px) rotateX(-10deg);
-            animation: slideUp 0.8s ease forwards;
-            border: 2px solid rgba(255, 107, 149, 0.2);
-        }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0) rotateX(0);
-            }
-        }
-
-        .letter-card:hover {
-            transform: translateY(-10px) rotateY(5deg);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-        }
-
-        .letter-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff6b95, #fccb90, #764ba2, #ff6b95);
-            border-radius: 15px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            background-size: 400% 400%;
-            animation: gradientMove 3s ease infinite;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .letter-card:hover::before {
-            opacity: 1;
-        }
-
-        .letter-number {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #ff6b95, #ff8a95);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1rem;
-            box-shadow: 0 4px 10px rgba(255, 107, 149, 0.3);
-        }
-
-        .letter-content {
-            font-family: 'Caveat', cursive;
-            font-size: 1.3rem;
-            line-height: 1.6;
-            color: #5d4037;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .letter-seal {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #ff6b95, #fccb90);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: white;
-            box-shadow: 0 4px 10px rgba(255, 107, 149, 0.3);
-            opacity: 0.8;
-        }
-
         /* Button */
         .reveal-btn {
             background: linear-gradient(135deg, #ff6b95, #fccb90);
@@ -468,7 +455,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 10px 30px rgba(255, 107, 149, 0.3);
-            display: flex;
+            display: none;
             align-items: center;
             gap: 10px;
             position: relative;
@@ -509,7 +496,7 @@
         }
 
         .final-message h2 {
-            font-family: 'Dancing Script', cursive;
+            font-family: Arial, sans-serif;
             font-size: 3rem;
             background: linear-gradient(135deg, #ff6b95, #764ba2);
             -webkit-background-clip: text;
@@ -519,7 +506,7 @@
         }
 
         .final-message p {
-            font-family: 'Caveat', cursive;
+            font-family: Arial, sans-serif;
             font-size: 1.5rem;
             color: #5d4037;
             line-height: 1.6;
@@ -545,21 +532,27 @@
             }
 
             .envelope-container {
-                height: 300px;
+                height: 400px;
             }
 
-            .letters-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
+            .envelope-flap {
+                height: 100px;
             }
 
-            .letter-card {
-                padding: 20px;
-                min-height: 150px;
+            .envelope-body {
+                top: 50px;
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+                padding: 15px;
             }
 
             .letter-content {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
+            }
+
+            .envelope-prompt {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -652,14 +645,17 @@
     <div class="main-container">
         <header>
             <h1>A Letter to My Love</h1>
-            <p class="subtitle">For my dearest fish</p>
+            <p class="subtitle">For my dearest Lish</p>
         </header>
 
         <div class="envelope-container">
             <div class="envelope" id="envelope">
-                <div class="envelope-flap"></div>
+                <div class="envelope-flap" id="envelopeFlap"></div>
                 <div class="envelope-body">
-                    <span id="envelopeText">Click to open</span>
+                    <div class="envelope-prompt" id="envelopePrompt">Click to open the envelope</div>
+                    <div class="envelope-letters" id="envelopeLetters">
+                        <!-- Letters will be dynamically inserted here -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -670,19 +666,15 @@
         
         <div class="progress-text" id="progressText">0% of letter revealed</div>
 
-        <div class="letters-container" id="lettersContainer">
-            <!-- Letter cards will be dynamically inserted here -->
-        </div>
-
         <div class="btn-container">
-            <button class="reveal-btn" id="revealBtn" style="display: none;">
+            <button class="reveal-btn" id="revealBtn">
                 <i class="fas fa-envelope-open-text"></i>
                 Reveal More Letters
             </button>
         </div>
 
         <div class="final-message" id="finalMessage">
-            <h2>I Love You, fish</h2>
+            <h2>I Love You, Lish</h2>
             <p>Now. And forever.</p>
         </div>
     </div>
@@ -737,13 +729,16 @@
             "You address shame and guilt with heart and contemplate balance in all things. You're consistent in your values and cannot be swayed by temporality.",
             "You back your words up with actions and know the value of vulnerability and the compassion in boundaries.",
             "You are such a sweetheart and strong. You lead with the heart and also follow it.",
+            " i fell for your personality, your kindness., youre inner self.  I fell in love with your sympathy, honesty, your way of caring",
+            "i love what you are and what you arent, i love you completely and fully",
+            "i love being with you, i love talking to you i wish i could be with u 24/7",
             "You are the deity upon which I meditate and devote my life to."
         ];
 
         const seals = ['💕', '🌸', '💖', '🌺', '💗', '🌹', '💝', '🌷', '💕', '🌸', '💖', '🌺'];
 
         let currentCardIndex = 0;
-        const cardsToShow = 4;
+        const cardsToShow = 2;
         let totalCardsShown = 0;
         let currentSong = 1;
         const totalSongs = 5;
@@ -760,18 +755,16 @@
         // Setup envelope interaction
         function setupEnvelopeInteraction() {
             const envelope = document.getElementById('envelope');
-            const envelopeText = document.getElementById('envelopeText');
+            const envelopeFlap = document.getElementById('envelopeFlap');
             
-            envelope.addEventListener('click', function() {
+            envelopeFlap.addEventListener('click', function() {
                 if (!envelopeOpened) {
                     envelope.classList.add('open');
-                    envelopeText.textContent = 'Letters revealed!';
                     envelopeOpened = true;
                     
-                    setTimeout(() => {
-                        showNextCards();
-                        document.getElementById('revealBtn').style.display = 'flex';
-                    }, 600);
+                    // Show first set of letters immediately
+                    showNextCards();
+                    document.getElementById('revealBtn').style.display = 'flex';
                     
                     // Start music on envelope open
                     if (!userInteracted) {
@@ -923,16 +916,24 @@
 
         // Show the next set of letter cards
         function showNextCards() {
-            const container = document.getElementById('lettersContainer');
+            const container = document.getElementById('envelopeLetters');
             const endIndex = Math.min(currentCardIndex + cardsToShow, letterContent.length);
             
-            for (let i = currentCardIndex; i < endIndex; i++) {
+            // First, make existing letters vanish
+            const existingLetters = container.querySelectorAll('.envelope-letter');
+            if (existingLetters.length > 0) {
+                existingLetters.forEach(letter => {
+                    letter.classList.add('vanishing');
+                });
+                
+                // Wait for vanish animation to complete
                 setTimeout(() => {
-                    const card = createLetterCard(i, letterContent[i]);
-                    container.appendChild(card);
-                    totalCardsShown++;
-                    updateProgressBar();
-                }, (i - currentCardIndex) * 200);
+                    container.innerHTML = '';
+                    addNewLetters(container, endIndex);
+                }, 400);
+            } else {
+                // First time, just add letters
+                addNewLetters(container, endIndex);
             }
             
             currentCardIndex = endIndex;
@@ -946,17 +947,28 @@
             }
         }
 
-        // Create a single letter card
-        function createLetterCard(index, content) {
-            const card = document.createElement('div');
-            card.className = 'letter-card';
-            card.style.animationDelay = `${index * 0.1}s`;
-            card.innerHTML = `
+        // Add new letters to the envelope
+        function addNewLetters(container, endIndex) {
+            for (let i = currentCardIndex; i < endIndex; i++) {
+                const letter = createEnvelopeLetter(i, letterContent[i]);
+                container.appendChild(letter);
+                totalCardsShown++;
+            }
+            
+            updateProgressBar();
+        }
+
+        // Create a single letter card for the envelope
+        function createEnvelopeLetter(index, content) {
+            const letter = document.createElement('div');
+            letter.className = 'envelope-letter';
+            letter.style.animationDelay = `${(index - currentCardIndex) * 0.1}s`;
+            letter.innerHTML = `
                 <div class="letter-number">${index + 1}</div>
                 <div class="letter-content">${content}</div>
                 <div class="letter-seal">${seals[index % seals.length]}</div>
             `;
-            return card;
+            return letter;
         }
 
         // Update the progress bar
