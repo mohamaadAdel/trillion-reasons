@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Letter to My Love, Lish</title>
+    <title>A Letter to My Love, Fish</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -657,27 +657,27 @@
     <div class="particle" style="left: 90%; animation-delay: 16s; font-size: 23px;">🌹</div>
 
     <!-- Background Music -->
-    <audio id="song1" loop>
+    <audio id="song1">
         <source src="song.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
     
-    <audio id="song2" loop>
+    <audio id="song2">
         <source src="song2.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
     
-    <audio id="song3" loop>
+    <audio id="song3">
         <source src="song3.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
     
-    <audio id="song4" loop>
+    <audio id="song4">
         <source src="song4.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
     
-    <audio id="song5" loop>
+    <audio id="song5">
         <source src="song5.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
@@ -732,7 +732,7 @@
     <div class="main-container">
         <header>
             <h1>A Letter to My Love</h1>
-            <p class="subtitle">For my dearest Lish</p>
+            <p class="subtitle">For my dearest Fish</p>
         </header>
 
         <div class="envelope-container">
@@ -761,7 +761,7 @@
         </div>
 
         <div class="final-message" id="finalMessage">
-            <h2>I Love You, Lish</h2>
+            <h2>I Love You, Fish</h2>
             <p>Now. And forever.</p>
         </div>
     </div>
@@ -832,6 +832,7 @@
         let isPlaying = false;
         let userInteracted = false;
         let envelopeOpened = false;
+        let autoPlay = false;
 
         // Initialize the page
         function init() {
@@ -856,6 +857,7 @@
                     // Start music on envelope open
                     if (!userInteracted) {
                         userInteracted = true;
+                        autoPlay = true;
                         const playPauseBtn = document.getElementById('playPauseBtn');
                         playPauseBtn.click();
                     }
@@ -893,6 +895,23 @@
             // Set initial volume for all songs
             songs.forEach(song => {
                 song.volume = 0.5;
+            });
+
+            // Add ended event listeners for sequential playback
+            songs.forEach((song, index) => {
+                song.addEventListener('ended', function() {
+                    if (autoPlay && isPlaying) {
+                        // Play next song in sequence
+                        const nextSongIndex = (index + 1) % totalSongs;
+                        if (nextSongIndex === 0) {
+                            // If we're at the last song, go to first
+                            currentSong = 1;
+                        } else {
+                            currentSong = nextSongIndex + 1;
+                        }
+                        playCurrentSong();
+                    }
+                });
             });
 
             // Play/Pause functionality
