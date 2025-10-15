@@ -681,6 +681,11 @@
         <source src="song5.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+    
+    <audio id="song6">
+        <source src="song6.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     <!-- Music Player -->
     <div class="music-player">
@@ -725,6 +730,10 @@
             <div class="playlist-item" data-song="5">
                 <i class="fas fa-music"></i>
                 <span>Our Fifth  Song</span>
+            </div>
+            <div class="playlist-item" data-song="6">
+                <i class="fas fa-music"></i>
+                <span>Our Sixth  Song</span>
             </div>
         </div>
     </div>
@@ -771,26 +780,33 @@
         const letterContent = [
             "Why I love you",
             "I didn't fall for you because I was bored, or because I was searching for something to fill a void.",
-            "I didn't fall in love with you because I needed saving, or because I thought I couldn't be happy without you.",
+            "I didn't fall in love with you because I needed someone, or because I thought I couldn't be happy without you.",
             "No, I fell because you opened my eyes to things I hadn't felt in a while.",
-            "You brought me a love that felt like sunlight after a long winter (i know u hate summer sorry, the sunlight here is 15 degrees not 40).",
-            "I love you simply because you *were*—",
-            "Because you appeared when the universe decided the time was right.",
+            "You brought me a love that felt like sunlight after a long winter (i know ur ass hate summer sorry, the sunlight here is 15 degrees not 40).",
+            "I love you simply because you *ARE*—",
+            "Because you appeared in time where i thought i will never love anyone again.",
             "And in that moment, you seized my attention like a song I never wanted to stop hearing.",
             "It's as if my heart *knew* you would be the one to teach it to beat in new rhythms (tbh it was after knowing u for a bit 😔😔 n)",
             "To show me feelings I never thought were possible, and open my soul to warmth I had never known.",
             "I fell in love with you because it felt like *having all anxiety removed from me.*",
             "It was effortless, like the way we breathe.",
             "Or how a bird knows the way back to its nest, even from miles away.",
-            "In your presence, I want to be better.",
-            "In your absence, I find myself searching for ways to grow.",
-            "In your words, I hear truths I never dared to speak aloud.",
-            "In your silence, I find the ache in your voice, like a song left unsung in the quiet.",
+            "In your presence, I want to give you the world and everything i can give.",
+            "In your absence, I find myself searching for ways to be better for u.",
+           
             "I fell in love with you for the simplest, most profound reason—",
-            "Because with you, everything just *fits.*",
-            "It feels *right,* in a way I can't fully explain.",
-            "But I know with every beat of my heart, it's exactly how I'm meant to feel.",
+            "Because with you, everything just *fits and feels good*",
+            "It feels *right,* in a way I can't fully explain😔.",
+            "But I know and sure of it from my heart, it's exactly how I'm meant to feel about you",
             "I love you, fish. Now. And forever.",
+            "you are literally the samllest baby ever, my baby, i love you so much, youre the sweetest and kindest ass ever",
+            "i know u dont like showing it but it still shows to me, how sweet and dumbass u are",
+            "i want to hold you between my arms, and take away all your bad feelings",
+            "i want to give you all my love and affection that i can possibly give",
+            "i know ur ass gets sick of my emotions 😔😔",
+            "im sorry if i make you feel bad and annoy you alot ",
+            "i want you so bad u cant imagine",
+
             "Your beauty takes my breath away. Your eyes are so bright and big I could swim in them, looking at them makes me dizzy.",
             "Your fluffy black hair, pretty face, and cute nose - all of you is total perfectiness. You have the prettiest skin tones ever, I love it so much.",
             "Your personality lights up my world. You're too funny and have similar humor to me, and you stay patient even when I'm overwhelming.",
@@ -798,6 +814,11 @@
             "You're a real one - generous with a selfless and humble soul. You have good taste and I love the same things you love 😔",
             "You're so considerate and caring, always taking attention to me. You cook so good and take beautiful photos of the things you cook.",
             "I feel peace imagining you comfortably resting in my arms, as it is for me to converse with you.",
+            "you dont give yourself enough credit for how much good you are fuck you", 
+            "you might not see it but ur the most lovley ever, the sweetest, the cutest, the kindest, the most small kitty ever, whenever i think about u i want to take u in my hug and make u rest on my chest ",
+            "i hope im not pushing u away because of my hard feelings and being this way sorry ",
+
+            "when u send me selfies im always looking at ur pretty hair and i cant help but to stare at your eyes its so embarrassinggggg i every single detail of your face is so fucking pretty and its so unreal ",
             "You're so accomplished - you set and achieve your goals. You come from chaos but you've acquired property and career mobility, you're destined to have all you want.",
             "You're my small baby who listens to me. You're an individualist and critical thinker who does your own thing instead of losing yourself in others' opinions.",
             "I love this so much about you, you idiot! You're in touch with every side of your emotions and unafraid to face them, making you wise and authentic.",
@@ -805,10 +826,14 @@
             "You're well rounded (not your ass it's flattened 😓) and will succeed in anything. Your experiences and interests are so interesting.",
             "I admire your work ethic so much. You never quit and keep working hard even when it's frustrating. You're the hardest worker I know, but I know how much it hurts you.",
             "I wish you could stop working and never tire yourself again. It really hurts me seeing you hurting.",
+            "can i borrow your genes for my future kids 🫢😿😳🧕🏿 ",
+            " you stole my heart but im too kind i will let u keep it 😓😔 ",
+            "🦋 Hope you feel happy everyday, because that makes me happy too",
+            " YOU ARE the cutessst, i don't mean just ur looks, but your personality, too, the things you say are cute, your voice is cute, your smile is the cutest i ever seen, your laugh is cute, youre so perfect , im losing my mind",
             "You make trust so easy with your direct communication and gentle temperament with me. I love your taste in music and your voice is so drugging.",
             "You're not afraid to have deep or sad conversations, but they're not your only conversations. Your ability to focus and prioritize important things amazes me.",
-            "Your flexibility regarding plans evolving, and how we can indulge our inner child together with things like Nintendo or cosplay.",
-            "You're realistic and authentic about the realities of life and its struggle. You take good selfies - I love looking at your big eyes and pretty face.",
+            "You're realistic and authentic about the realities of life and its struggle. ",
+            "You take good selfies (send them all to me😡) - I love looking at your big eyes and pretty face.",
             "Every moment with you is awesome in its own way. You comfort me, calm me, reassure me, and love me as I am.",
             "You soften me, soothe me, and ground me. You take nothing for granted and value your loved ones.",
             "You respect differences and appreciate similarities. You defend truth and face your fears. You're out of this world!",
@@ -828,7 +853,7 @@
         const cardsToShow = 2;
         let totalCardsShown = 0;
         let currentSong = 1;
-        const totalSongs = 5;
+        const totalSongs = 6; // Updated from 5 to 6
         let isPlaying = false;
         let userInteracted = false;
         let envelopeOpened = false;
@@ -872,7 +897,8 @@
                 document.getElementById('song2'),
                 document.getElementById('song3'),
                 document.getElementById('song4'),
-                document.getElementById('song5')
+                document.getElementById('song5'),
+                document.getElementById('song6')
             ];
             
             const songTitles = [
@@ -880,7 +906,8 @@
                 'Our Second Love Song',
                 'Our Third Love Song',
                 'Our Fourth Love Song',
-                'Our Fifth Love Song'
+                'Our Fifth Love Song',
+                'Our Sixth Love Song'
             ];
 
             const playPauseBtn = document.getElementById('playPauseBtn');
