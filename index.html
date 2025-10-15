@@ -686,6 +686,11 @@
         <source src="song6.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+    
+    <audio id="song7">
+        <source src="song7.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     <!-- Music Player -->
     <div class="music-player">
@@ -734,6 +739,10 @@
             <div class="playlist-item" data-song="6">
                 <i class="fas fa-music"></i>
                 <span>Our Sixth  Song</span>
+            </div>
+            <div class="playlist-item" data-song="7">
+                <i class="fas fa-music"></i>
+                <span>Our Seventh  Song</span>
             </div>
         </div>
     </div>
@@ -856,7 +865,7 @@
         const cardsToShow = 2;
         let totalCardsShown = 0;
         let currentSong = 1;
-        const totalSongs = 6; // Updated from 5 to 6
+        const totalSongs = 7; // Updated from 6 to 7
         let isPlaying = false;
         let userInteracted = false;
         let envelopeOpened = false;
@@ -901,7 +910,8 @@
                 document.getElementById('song3'),
                 document.getElementById('song4'),
                 document.getElementById('song5'),
-                document.getElementById('song6')
+                document.getElementById('song6'),
+                document.getElementById('song7')
             ];
             
             const songTitles = [
@@ -910,7 +920,8 @@
                 'Our Third Love Song',
                 'Our Fourth Love Song',
                 'Our Fifth Love Song',
-                'Our Sixth Love Song'
+                'Our Sixth Love Song',
+                'Our Seventh Love Song'
             ];
 
             const playPauseBtn = document.getElementById('playPauseBtn');
